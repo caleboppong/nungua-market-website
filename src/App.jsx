@@ -33,6 +33,33 @@ const homeCategories = [
 ];
 
 
+function ProductForm({ value, setValue, onSubmit, submitText, files, setFiles }) {
+  return (
+    <form onSubmit={onSubmit} className="admin-grid">
+      <input className="input" placeholder="Product name" value={value.name || ""} onChange={(e) => setValue({ ...value, name: e.target.value })} />
+      <select className="select" value={value.category || "Fresh Produce"} onChange={(e) => setValue({ ...value, category: e.target.value })}>
+        {categories.filter(c => c !== "All").map(c => <option key={c}>{c}</option>)}
+      </select>
+      <input className="input" type="number" step="0.01" placeholder="Price" value={value.price || ""} onChange={(e) => setValue({ ...value, price: e.target.value })} />
+      <input className="input" type="number" placeholder="Stock quantity" value={value.stock || ""} onChange={(e) => setValue({ ...value, stock: e.target.value })} />
+      <input className="input wide" placeholder="Optional image URL" value={value.image_url || ""} onChange={(e) => setValue({ ...value, image_url: e.target.value })} />
+      <textarea className="input wide" placeholder="Description" value={value.description || ""} onChange={(e) => setValue({ ...value, description: e.target.value })} />
+      <label><input type="checkbox" checked={Boolean(value.available)} onChange={(e) => setValue({ ...value, available: e.target.checked })} /> Available</label>
+      <div className="upload-box wide">
+        <b><Upload size={16}/> Upload product images</b>
+        <p className="muted small">Choose one or more images from your computer.</p>
+        <input className="input" type="file" accept="image/*" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
+        <div className="preview-list">
+            {files.map((file, idx) => (
+              <p key={idx} className="muted small">{file.name}</p>
+            ))}
+          </div>
+      </div>
+      <button className="btn btn-dark" type="submit">{submitText}</button>
+    </form>
+  );
+}
+
 export default function App() {
   const [products, setProducts] = useState([]);
   const [productImages, setProductImages] = useState([]);
@@ -49,7 +76,13 @@ export default function App() {
   const [editProduct, setEditProduct] = useState({});
   const [newFiles, setNewFiles] = useState([]);
   const [editFiles, setEditFiles] = useState([]);
-  const [customer, setCustomer] = useState({ name: "", phone: "", email: "", address: "" });
+  const [customer, setCustomer] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    fulfilment_method: "collection"
+  });
   const [message, setMessage] = useState("");
   const [contact, setContact] = useState({ name: "", email: "", phone: "", message: "" });
   const [contactMessages, setContactMessages] = useState([]);
@@ -309,30 +342,6 @@ export default function App() {
     if (error) setMessage(error.message); else loadOrders();
   }
 
-  function ProductForm({ value, setValue, onSubmit, submitText, files, setFiles }) {
-    return (
-      <form onSubmit={onSubmit} className="admin-grid">
-        <input className="input" placeholder="Product name" value={value.name || ""} onChange={(e) => setValue({ ...value, name: e.target.value })} />
-        <select className="select" value={value.category || "Fresh Produce"} onChange={(e) => setValue({ ...value, category: e.target.value })}>
-          {categories.filter(c => c !== "All").map(c => <option key={c}>{c}</option>)}
-        </select>
-        <input className="input" type="number" step="0.01" placeholder="Price" value={value.price || ""} onChange={(e) => setValue({ ...value, price: e.target.value })} />
-        <input className="input" type="number" placeholder="Stock quantity" value={value.stock || ""} onChange={(e) => setValue({ ...value, stock: e.target.value })} />
-        <input className="input wide" placeholder="Optional image URL" value={value.image_url || ""} onChange={(e) => setValue({ ...value, image_url: e.target.value })} />
-        <textarea className="input wide" placeholder="Description" value={value.description || ""} onChange={(e) => setValue({ ...value, description: e.target.value })} />
-        <label><input type="checkbox" checked={Boolean(value.available)} onChange={(e) => setValue({ ...value, available: e.target.checked })} /> Available</label>
-        <div className="upload-box wide">
-          <b><Upload size={16}/> Upload product images</b>
-          <p className="muted small">Choose one or more images from your computer.</p>
-          <input type="file" accept="image/*" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
-          <div className="preview-list">
-            {files.map((file, idx) => <img key={idx} src={URL.createObjectURL(file)} alt="Preview" />)}
-          </div>
-        </div>
-        <button className="btn btn-dark" type="submit">{submitText}</button>
-      </form>
-    );
-  }
 
   return (
     <div>
@@ -562,7 +571,7 @@ export default function App() {
             <>
               <div className="panel" style={{ overflow: "hidden", padding: 0 }}>
                 <img
-                  src="/shop1.jpg"
+                  src="/Shop1.jpeg"
                   alt="Nungua Market shop front"
                   style={{ width: "100%", height: "280px", objectFit: "cover", display: "block" }}
                 />
@@ -680,8 +689,22 @@ export default function App() {
             <input className="input" placeholder="Phone number" value={customer.phone} onChange={(e) => setCustomer({ ...customer, phone: e.target.value })} />
             <input className="input" placeholder="Email" value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} />
             <input className="input" placeholder="Delivery address / collection note" value={customer.address} onChange={(e) => setCustomer({ ...customer, address: e.target.value })} />
-            <button className="btn btn-gold" onClick={placeOrder}>Place Order</button>{" "}
-            <button className="btn btn-dark" onClick={payWithStripe}>Pay by Card</button>
+            <select
+              className="input"
+              value={customer.fulfilment_method}
+              onChange={(e) => setCustomer({ ...customer, fulfilment_method: e.target.value })}
+>
+              <option value="collection">Collection from shop</option>
+              <option value="delivery">Delivery</option>
+            </select>
+
+            <button className="btn btn-dark" onClick={payWithStripe}>
+              Pay by Card
+            </button>
+
+            <p className="muted small">
+              After payment, your order will be sent to admin for confirmation.
+            </p>
             <p className="muted small">Card payment uses a Stripe Payment Link when configured.</p>
           </div>
         </aside>

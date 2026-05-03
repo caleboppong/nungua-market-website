@@ -29,18 +29,39 @@
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  section {
+    order: 1;
   }
 
   aside {
-    order: -1;
+    order: 2;
+  }
+
+  .hero,
+  .panel {
+    width: 100%;
   }
 
   .grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .card img {
     height: 140px;
+  }
+
+  .header h1 {
+    font-size: 26px;
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 }
 

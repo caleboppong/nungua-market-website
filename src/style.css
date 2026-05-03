@@ -137,3 +137,18 @@
     padding: 10px 13px;
   }
 }
+
+/* Keep shop content first on mobile */
+@media (max-width: 900px) {
+  aside {
+    order: 2 !important;
+  }
+
+  main.layout > section {
+    order: 1;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

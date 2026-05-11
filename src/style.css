@@ -409,46 +409,68 @@ textarea {
   margin-top: 28px;
 }
 
+/*DEPARTMENT CARDS*/
 .department-card {
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.94);
-  color: #0f172a;
+  position: relative;
+  overflow: hidden;
   border-radius: 28px;
   padding: 30px;
   text-align: left;
   cursor: pointer;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+  min-height: 240px;
+  color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.25);
   transition: 0.2s transform, 0.2s box-shadow;
 }
 
 .department-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
 }
 
+/* Dark overlay */
+.department-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.30);
+}
+
+/* Keep content above overlay */
+.department-card * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Grocery image */
+.department-card {
+  background-image: url("/shop-department.png");
+}
+
+/* Restaurant image */
 .department-card.restaurant {
-  background: #fef3c7;
+  background-image: url("/restaurant-department.jpeg");
 }
 
-.department-card svg {
-  color: #020617;
-}
-
-.department-card h2 {
-  font-size: 30px;
-  margin: 16px 0 8px;
-}
-
+.department-card svg,
+.department-card h2,
 .department-card p {
-  color: #475569;
-  line-height: 1.5;
+  display: none;
 }
 
 .department-card span {
   display: inline-block;
-  margin-top: 14px;
+  margin-top: 160px;
   font-weight: 900;
-  color: #020617;
+  font-size: 22px;
+  color: white;
+  background: rgba(2, 6, 23, 0.78);
+  padding: 12px 18px;
+  border-radius: 16px;
 }
 
 /*LOGO*/
@@ -561,6 +583,11 @@ textarea {
 
   .home-logo {
     width: 260px;
+  }
+
+  .department-card span {
+    margin-top: 145px;
+    font-size: 18px;
   }
 }
 

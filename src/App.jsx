@@ -33,8 +33,8 @@ const restaurantOpeningHours = [
 // Update these details if the shop or restaurant address/phone changes.
 const businessInfo = {
   shop: {
-    //name: "Nungua Market African Food",
-    //label: "African goods shop",
+    name: "Nungua Market African Food",
+    label: "African goods shop",
     phone: "020 7000 4115",
     email: "shop@nunguamarket.com",
     image: "/Shop1.jpeg",
@@ -54,8 +54,8 @@ const businessInfo = {
     ]
   },
   restaurant: {
-    /* name: "Nungua Market Kitchen",
-    label: "Restaurant department", */
+    name: "Nungua Market Kitchen",
+    label: "Restaurant department",
     address: "75 Old Church Road, Chingford Mount, London E4 6ST",
     phone: "020 3152 4136",
     email: "restaurant@nunguamarket.com",
@@ -593,7 +593,6 @@ export default function App() {
         <header className="department-hero">
           <div className="department-overlay">
             <div className="wrap">
-              {/*<p className="gold">Nungua Market</p>*/}
               <img
                 src="/logo.png"
                 alt="Nungua Market Logo"
@@ -778,8 +777,8 @@ export default function App() {
       <div className="panel" style={{ padding: 0, overflow: "hidden", background: "#020617", color: "white" }}>
         <div style={{ minHeight: "330px", backgroundImage: `linear-gradient(90deg, rgba(2,6,23,.78), rgba(2,6,23,.25)), url(${slides[slide]})`, backgroundSize: "cover", backgroundPosition: "center", display: "flex", alignItems: "center", padding: "36px" }}>
           <div style={{ maxWidth: "640px" }}>
-          {/*<p className="gold" style={{ fontWeight: 800 }}>{restaurant ? "Fresh African meals in Walthamstow" : "Authentic African groceries in Walthamstow"}</p>
-            <h2 style={{ fontSize: "42px", margin: "10px 0" }}>{restaurant ? "Order restaurant food for collection or delivery" : "Shop Ghanaian & African food online"}</h2> */}
+            <p className="gold" style={{ fontWeight: 800 }}>{restaurant ? "Fresh African meals in Walthamstow" : "Authentic African groceries in Walthamstow"}</p>
+            <h2 style={{ fontSize: "42px", margin: "10px 0" }}>{restaurant ? "Order restaurant food for collection or delivery" : "Shop Ghanaian & African food online"}</h2>
             <p style={{ fontSize: "18px", lineHeight: 1.5 }}>{restaurant ? "Choose your meal, check your delivery postcode, and send your order to the restaurant." : "Order fresh produce, gari, fufu flour, jollof ingredients, spices, drinks, and household essentials."}</p>
           </div>
         </div>
@@ -1026,3 +1025,4 @@ export default function App() {
   // Final render: show selected department page.
   return department === "shop" ? ShopPage() : RestaurantPage();
 }
+

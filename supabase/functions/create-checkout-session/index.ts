@@ -40,6 +40,10 @@ Deno.serve(async (req) => {
         customer_phone: customer?.phone || "",
         customer_email: customer?.email || "",
         customer_address: customer?.address || "",
+<<<<<<< HEAD
+=======
+        fulfilment_method: customer?.fulfilment_method || "collection",
+>>>>>>> 20d45a3e1d5b0c68553c6cc1085de83e96d8b427
         items: JSON.stringify(
           items.map((item: any) => ({
             id: item.id,

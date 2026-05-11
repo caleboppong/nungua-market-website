@@ -52,6 +52,11 @@ Deno.serve(async (req) => {
         total_price: Number(session.amount_total || 0) / 100,
         status: "new",
         payment_status: "paid",
+<<<<<<< HEAD
+=======
+        fulfilment_method: session.metadata?.fulfilment_method || "collection",
+        admin_note: "Paid by card. Awaiting admin confirmation.",
+>>>>>>> 20d45a3e1d5b0c68553c6cc1085de83e96d8b427
       })
       .select()
       .single();

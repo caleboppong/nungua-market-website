@@ -2,117 +2,49 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "./supabaseClient";
 import {
-  ShoppingCart,
-  MapPin,
-  Phone,
-  Clock,
-  Plus,
-  Trash2,
-  Pencil,
-  LogOut,
-  PackageCheck,
-  UserPlus,
-  BarChart3,
-  Upload,
-  Store,
-  Utensils,
-  ArrowLeft,
-  Bike,
-  Heart,
-  MessageCircle,
-  Moon,
-  Sun,
-  Music2,
-  VolumeX
+  ShoppingCart, MapPin, Phone, Clock, Plus, Trash2, Pencil,
+  LogOut, PackageCheck, UserPlus, BarChart3, Upload, Store,
+  Utensils, ArrowLeft, Bike, Heart, MessageCircle, Moon, Sun,
+  Music2, VolumeX
 } from "lucide-react";
 
-// Grocery shop product categories.
-const shopCategories = [
-  "All",
-  "Fresh Produce",
-  "Grains & Flour",
-  "Cooking Ingredients",
-  "Oils & Sauces",
-  "Drinks",
-  "Frozen Food",
-  "Spices"
-];
-
-// Restaurant food categories.
+const shopCategories = ["All", "Fresh Produce", "Meat & Seafood", "Groceries", "Grains & Flour", "Cooking Ingredients", "Oils & Sauces", "Vegetables", "Seasonings", "Spices", "Drinks", "Snacks", "Frozen Food", "Personal Care"];
 const foodCategories = ["All", "Main Meals", "Rice Dishes", "Soups", "Grills", "Sides", "Drinks", "Desserts"];
 
-// Homepage / grocery shop slideshow images. These files must be inside the public folder.
 const slideshowImages = ["/Shop1.jpeg", "/Shop2.jpeg", "/Shop3.jpeg", "/Shop4.jpeg", "/Shop5.jpeg", "/Shop6.jpeg"];
-
-// Restaurant slideshow images. Put these restaurant images inside the public folder.
 const restaurantSlides = ["/Restaurant1.jpeg", "/Restaurant2.jpeg", "/Restaurant3.jpeg"];
 
-const blankProduct = {
-  name: "",
-  category: "Fresh Produce",
-  price: "",
-  image_url: "",
-  stock: "",
-  description: "",
-  available: true
-};
-
-const blankFood = {
-  name: "",
-  category: "Main Meals",
-  price: "",
-  image_url: "",
-  stock: "",
-  description: "",
-  available: true
-};
+const blankProduct = { name: "", category: "Fresh Produce", price: "", image_url: "", stock: "", description: "", available: true };
+const blankFood = { name: "", category: "Main Meals", price: "", image_url: "", stock: "", description: "", available: true };
 
 const shopOpeningHours = [
-  ["Monday", "9am–9pm"],
-  ["Tuesday", "9am–9pm"],
-  ["Wednesday", "9am–9pm"],
-  ["Thursday", "9am–9pm"],
-  ["Friday", "9am–9pm"],
-  ["Saturday", "9am–9pm"],
-  ["Sunday", "10am–9pm"]
+  ["Monday", "9am–9pm"], ["Tuesday", "9am–9pm"], ["Wednesday", "9am–9pm"],
+  ["Thursday", "9am–9pm"], ["Friday", "9am–9pm"], ["Saturday", "9am–9pm"], ["Sunday", "10am–9pm"]
 ];
 
 const restaurantOpeningHours = [
-  ["Monday", "12pm–10pm"],
-  ["Tuesday", "12pm–10pm"],
-  ["Wednesday", "12pm–10pm"],
-  ["Thursday", "12pm–10pm"],
-  ["Friday", "12pm–11pm"],
-  ["Saturday", "12pm–11pm"],
-  ["Sunday", "12pm–11pm"]
+  ["Monday", "10:30am–11pm"], ["Tuesday", "10:30am–11pm"], ["Wednesday", "10:30am–11pm"],
+  ["Thursday", "10:30am–11pm"], ["Friday", "10:30am–11pm"], ["Saturday", "10:30am–11pm"], ["Sunday", "10:30am–11pm"]
 ];
 
-// Separate business details for each department.
+
 const businessInfo = {
   shop: {
-    name: "Nungua Market African Food",
-    label: "African goods shop",
+    name: "",
+    label: "",
     phone: "020 7000 4115",
     email: "shop@nunguamarket.com",
     image: "/Shop1.jpeg",
     openingHours: shopOpeningHours,
     description: "Contact the grocery shop for African groceries, bulk orders, and collection enquiries.",
     branches: [
-      {
-        name: "Walthamstow Branch",
-        address: "32 High St, London E17 7LD",
-        mapQuery: "32 High St, London E17 7LD"
-      },
-      {
-        name: "Plaistow Branch",
-        address: "133 Balaam Street, London E13 8AF",
-        mapQuery: "133 Balaam Street, London E13 8AF"
-      }
+      { name: "Walthamstow Branch", address: "32 High St, London E17 7LD", mapQuery: "32 High St, London E17 7LD" },
+      { name: "Plaistow Branch", address: "133 Balaam Street, London E13 8AF", mapQuery: "133 Balaam Street, London E13 8AF" }
     ]
   },
   restaurant: {
-    name: "Nungua Market Kitchen",
-    label: "Restaurant department",
+    name: "",
+    label: "",
     address: "75 Old Church Road, Chingford Mount, London E4 6ST",
     phone: "020 3152 4136",
     email: "restaurant@nunguamarket.com",
@@ -163,76 +95,31 @@ function getDeliveryInfo(postcode) {
     return { allowed: true, fee: broad[1], message: `Delivery available to ${prefix}. Fee £${broad[1].toFixed(2)}.` };
   }
 
-  return {
-    allowed: false,
-    fee: 0,
-    message: "Sorry, delivery is not currently available to this postcode. Please choose collection."
-  };
+  return { allowed: false, fee: 0, message: "Sorry, delivery is not currently available to this postcode. Please choose collection." };
 }
 
 function ProductForm({ value, setValue, onSubmit, submitText, files, setFiles, categories }) {
   return (
     <form onSubmit={onSubmit} className="admin-grid">
-      <input
-        className="input"
-        placeholder="Name"
-        value={value.name || ""}
-        onChange={(e) => setValue({ ...value, name: e.target.value })}
-      />
+      <input className="input" placeholder="Name" value={value.name || ""} onChange={(e) => setValue({ ...value, name: e.target.value })} />
 
-      <select
-        className="select"
-        value={value.category || categories[1]}
-        onChange={(e) => setValue({ ...value, category: e.target.value })}
-      >
+      <select className="select" value={value.category || categories[1]} onChange={(e) => setValue({ ...value, category: e.target.value })}>
         {categories.filter((c) => c !== "All").map((c) => <option key={c}>{c}</option>)}
       </select>
 
-      <input
-        className="input"
-        type="number"
-        step="0.01"
-        placeholder="Price"
-        value={value.price || ""}
-        onChange={(e) => setValue({ ...value, price: e.target.value })}
-      />
-
-      <input
-        className="input"
-        type="number"
-        placeholder="Stock quantity"
-        value={value.stock || ""}
-        onChange={(e) => setValue({ ...value, stock: e.target.value })}
-      />
-
-      <input
-        className="input wide"
-        placeholder="Optional image URL"
-        value={value.image_url || ""}
-        onChange={(e) => setValue({ ...value, image_url: e.target.value })}
-      />
-
-      <textarea
-        className="input wide"
-        placeholder="Description"
-        value={value.description || ""}
-        onChange={(e) => setValue({ ...value, description: e.target.value })}
-      />
+      <input className="input" type="number" step="0.01" placeholder="Price" value={value.price || ""} onChange={(e) => setValue({ ...value, price: e.target.value })} />
+      <input className="input" type="number" placeholder="Stock quantity" value={value.stock || ""} onChange={(e) => setValue({ ...value, stock: e.target.value })} />
+      <input className="input wide" placeholder="Optional image URL" value={value.image_url || ""} onChange={(e) => setValue({ ...value, image_url: e.target.value })} />
+      <textarea className="input wide" placeholder="Description" value={value.description || ""} onChange={(e) => setValue({ ...value, description: e.target.value })} />
 
       <label>
-        <input
-          type="checkbox"
-          checked={Boolean(value.available)}
-          onChange={(e) => setValue({ ...value, available: e.target.checked })}
-        />{" "}
-        Available
+        <input type="checkbox" checked={Boolean(value.available)} onChange={(e) => setValue({ ...value, available: e.target.checked })} /> Available
       </label>
 
       <div className="upload-box wide">
         <b><Upload size={16} /> Upload images</b>
         <p className="muted small">Choose one or more images from your computer or phone.</p>
         <input className="input" type="file" accept="image/*" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
-
         <div className="preview-list">
           {files.map((file, idx) => <p key={idx} className="muted small">{file.name}</p>)}
         </div>
@@ -271,6 +158,11 @@ export default function App() {
   const [restaurantCart, setRestaurantCart] = useState([]);
 
   const [session, setSession] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [adminUsers, setAdminUsers] = useState([]);
+
   const [category, setCategory] = useState("All");
   const [foodCategory, setFoodCategory] = useState("All");
   const [search, setSearch] = useState("");
@@ -320,7 +212,6 @@ export default function App() {
       setCurrentSlide((prev) => (prev + 1) % slideshowImages.length);
       setCurrentRestaurantSlide((prev) => (prev + 1) % restaurantSlides.length);
     }, 4500);
-
     return () => clearInterval(timer);
   }, []);
 
@@ -351,6 +242,42 @@ export default function App() {
       }
     }
   }, [session]);
+
+  useEffect(() => {
+    async function checkAdmin() {
+      if (!session?.user?.email) {
+        setIsAdmin(false);
+        setIsSuperAdmin(false);
+        return;
+      }
+
+      const email = session.user.email.toLowerCase().trim();
+
+      const { data, error } = await supabase
+        .from("admin_users")
+        .select("role")
+        .eq("email", email)
+        .maybeSingle();
+
+      console.log("ADMIN CHECK:", data, error);
+
+      if (data) {
+        setIsAdmin(true);
+        setIsSuperAdmin(data.role === "super_admin");
+      } else {
+        setIsAdmin(false);
+        setIsSuperAdmin(false);
+      }
+    }
+
+    checkAdmin();
+  }, [session]);
+
+  useEffect(() => {
+    if (isSuperAdmin) {
+      loadAdminUsers();
+    }
+  }, [isSuperAdmin]);
 
   async function loadProducts() {
     const { data, error } = await supabase.from("products").select("*").order("name");
@@ -403,6 +330,19 @@ export default function App() {
     else setContactMessages(data || []);
   }
 
+  async function loadAdminUsers() {
+    const { data, error } = await supabase
+      .from("admin_users")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      setMessage(error.message);
+    } else {
+      setAdminUsers(data || []);
+    }
+  }
+
   async function sendContactMessage(e) {
     e.preventDefault();
 
@@ -411,7 +351,6 @@ export default function App() {
     }
 
     const { error } = await supabase.from("contact_messages").insert(contact);
-
     if (error) return setMessage(error.message);
 
     setContact({ name: "", email: "", phone: "", message: "" });
@@ -424,7 +363,7 @@ export default function App() {
     e.preventDefault();
 
     const { error } = await supabase.auth.signInWithPassword({
-      email: login.email,
+      email: login.email.trim().toLowerCase(),
       password: login.password
     });
 
@@ -436,14 +375,14 @@ export default function App() {
     e.preventDefault();
 
     const { error } = await supabase.auth.signUp({
-      email: signup.email,
+      email: signup.email.trim().toLowerCase(),
       password: signup.password
     });
 
     if (error) {
       setMessage(error.message);
     } else {
-      setMessage("Customer account created. Check email if confirmation is enabled.");
+      setMessage("Customer account created. You can now log in.");
       setSignup({ email: "", password: "" });
     }
   }
@@ -452,6 +391,47 @@ export default function App() {
     await supabase.auth.signOut();
     setShopTab("shop");
     setRestaurantTab("menu");
+    setIsAdmin(false);
+    setIsSuperAdmin(false);
+  }
+
+  async function addAdminUser(e) {
+    e.preventDefault();
+
+    if (!newAdminEmail) {
+      return setMessage("Please enter an admin email.");
+    }
+
+    const { error } = await supabase
+      .from("admin_users")
+      .insert({
+        email: newAdminEmail.toLowerCase().trim(),
+        role: "admin"
+      });
+
+    if (error) {
+      setMessage(error.message);
+    } else {
+      setMessage("Admin added successfully.");
+      setNewAdminEmail("");
+      loadAdminUsers();
+    }
+  }
+
+  async function deleteAdminUser(id, email) {
+    if (!confirm(`Remove admin access for ${email}?`)) return;
+
+    const { error } = await supabase
+      .from("admin_users")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      setMessage(error.message);
+    } else {
+      setMessage("Admin removed successfully.");
+      loadAdminUsers();
+    }
   }
 
   function imagesFor(productId) {
@@ -515,8 +495,8 @@ export default function App() {
     };
 
     setFavourites((items) => {
-      const exists = items.find((x) => x.id === item.id);
-      if (exists) return items.filter((x) => x.id !== item.id);
+      const exists = items.find((x) => x.id === item.id && x.type === type);
+      if (exists) return items.filter((x) => !(x.id === item.id && x.type === type));
       return [...items, favouriteItem];
     });
   }
@@ -527,24 +507,24 @@ export default function App() {
       return;
     }
 
-    audioRef.current.volume = 0.5;
+    audioRef.current.volume = 1;
 
     if (musicOn) {
       audioRef.current.pause();
+      audioRef.current.currentTime = 0;
       setMusicOn(false);
       setMessage("Music stopped.");
       return;
     }
 
-    audioRef.current
-      .play()
+    audioRef.current.play()
       .then(() => {
         setMusicOn(true);
         setMessage("Music is playing.");
       })
       .catch((error) => {
-        console.log("Audio error:", error);
-        setMessage("Music could not play. Check that public/background-music.mp3 exists, then click Music On again.");
+        console.log(error);
+        setMessage("Music failed to play.");
       });
   }
 
@@ -553,11 +533,7 @@ export default function App() {
 
     setCart((items) => {
       const found = items.find((i) => i.id === product.id);
-
-      if (found) {
-        return items.map((i) => i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i);
-      }
-
+      if (found) return items.map((i) => i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i);
       return [...items, { ...product, quantity: 1, image_url: mainImage(product) }];
     });
   }
@@ -567,11 +543,7 @@ export default function App() {
 
     setRestaurantCart((items) => {
       const found = items.find((i) => i.id === food.id);
-
-      if (found) {
-        return items.map((i) => i.id === food.id ? { ...i, quantity: i.quantity + 1 } : i);
-      }
-
+      if (found) return items.map((i) => i.id === food.id ? { ...i, quantity: i.quantity + 1 } : i);
       return [...items, { ...food, quantity: 1, image_url: mainFoodImage(food) }];
     });
   }
@@ -620,22 +592,14 @@ export default function App() {
 
   async function uploadProductFiles(files, productId) {
     const uploadedUrls = await uploadFiles(files, productId, "product-images", "product_images", "product_id");
-
-    if (uploadedUrls.length > 0) {
-      await supabase.from("products").update({ image_url: uploadedUrls[0] }).eq("id", productId);
-    }
-
+    if (uploadedUrls.length > 0) await supabase.from("products").update({ image_url: uploadedUrls[0] }).eq("id", productId);
     await loadProducts();
     await loadProductImages();
   }
 
   async function uploadFoodFiles(files, foodId) {
     const uploadedUrls = await uploadFiles(files, foodId, "food-images", "restaurant_food_images", "food_id");
-
-    if (uploadedUrls.length > 0) {
-      await supabase.from("restaurant_foods").update({ image_url: uploadedUrls[0] }).eq("id", foodId);
-    }
-
+    if (uploadedUrls.length > 0) await supabase.from("restaurant_foods").update({ image_url: uploadedUrls[0] }).eq("id", foodId);
     await loadFoods();
     await loadFoodImages();
   }
@@ -692,23 +656,14 @@ Total: £${total.toFixed(2)}`;
     }));
 
     const { error: itemError } = await supabase.from("order_items").insert(items);
-
     if (itemError) return setMessage(itemError.message);
 
     sendOrderToWhatsApp();
 
     setCart([]);
-    setCustomer({
-      name: "",
-      phone: "",
-      email: session?.user?.email || "",
-      address: "",
-      postcode: "",
-      fulfilment_method: "collection"
-    });
+    setCustomer({ name: "", phone: "", email: session?.user?.email || "", address: "", postcode: "", fulfilment_method: "collection" });
 
     setMessage("Grocery order received and WhatsApp order message opened.");
-
     if (session) loadOrders();
   }
 
@@ -746,14 +701,17 @@ Total: £${total.toFixed(2)}`;
       return setMessage(deliveryInfo.message);
     }
 
+    const currentCustomer = { ...restaurantCustomer };
+    const currentCart = [...restaurantCart];
+
     const { data: order, error } = await supabase.from("restaurant_orders").insert({
       user_id: session?.user?.id || null,
-      customer_name: restaurantCustomer.name,
-      customer_phone: restaurantCustomer.phone,
-      customer_email: restaurantCustomer.email || session?.user?.email || "",
-      customer_address: restaurantCustomer.address,
-      customer_postcode: normalisePostcode(restaurantCustomer.postcode),
-      fulfilment_method: restaurantCustomer.fulfilment_method,
+      customer_name: currentCustomer.name,
+      customer_phone: currentCustomer.phone,
+      customer_email: currentCustomer.email || session?.user?.email || "",
+      customer_address: currentCustomer.address,
+      customer_postcode: normalisePostcode(currentCustomer.postcode),
+      fulfilment_method: currentCustomer.fulfilment_method,
       subtotal_price: restaurantSubtotal,
       delivery_fee: restaurantDeliveryFee,
       total_price: restaurantTotal,
@@ -764,7 +722,7 @@ Total: £${total.toFixed(2)}`;
 
     if (error) return setMessage(error.message);
 
-    const items = restaurantCart.map((item) => ({
+    const items = currentCart.map((item) => ({
       order_id: order.id,
       food_id: item.id,
       quantity: item.quantity,
@@ -772,29 +730,23 @@ Total: £${total.toFixed(2)}`;
     }));
 
     const { error: itemError } = await supabase.from("restaurant_order_items").insert(items);
-
     if (itemError) return setMessage(itemError.message);
 
     const restaurantWhatsApp = "447920794448";
 
-const itemsText = restaurantCart
-  .map(
-    (item) =>
-      `${item.name} x ${item.quantity} = £${(
-        Number(item.price) * item.quantity
-      ).toFixed(2)}`
-  )
-  .join("\n");
+    const itemsText = currentCart
+      .map((item) => `${item.name} x ${item.quantity} = £${(Number(item.price) * item.quantity).toFixed(2)}`)
+      .join("\n");
 
-const orderMessage = `🍽️ NEW RESTAURANT ORDER
+    const orderMessage = `🍽️ NEW RESTAURANT ORDER
 
-Customer: ${restaurantCustomer.name}
-Phone: ${restaurantCustomer.phone}
-Email: ${restaurantCustomer.email || "None"}
+Customer: ${currentCustomer.name}
+Phone: ${currentCustomer.phone}
+Email: ${currentCustomer.email || "None"}
 
-Method: ${restaurantCustomer.fulfilment_method}
-Address/Note: ${restaurantCustomer.address || "None"}
-Postcode: ${restaurantCustomer.postcode || "None"}
+Method: ${currentCustomer.fulfilment_method}
+Address/Note: ${currentCustomer.address || "None"}
+Postcode: ${currentCustomer.postcode || "None"}
 
 Items:
 ${itemsText}
@@ -804,23 +756,24 @@ Delivery: £${restaurantDeliveryFee.toFixed(2)}
 Total: £${restaurantTotal.toFixed(2)}
 `;
 
-window.open(
-  `https://wa.me/${restaurantWhatsApp}?text=${encodeURIComponent(orderMessage)}`,
-  "_blank"
-);
+    window.open(`https://wa.me/${restaurantWhatsApp}?text=${encodeURIComponent(orderMessage)}`, "_blank");
 
-    setRestaurantCart([]);
-    setRestaurantCustomer({
-      name: "",
-      phone: "",
-      email: session?.user?.email || "",
-      address: "",
-      postcode: "",
-      fulfilment_method: "collection"
+    await fetch("https://quvjpenvmdkgaesqzslv.supabase.co/functions/v1/send-order-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer_name: currentCustomer.name,
+        customer_phone: currentCustomer.phone,
+        customer_email: currentCustomer.email,
+        total_price: restaurantTotal,
+        items: currentCart
+      })
     });
 
-    setMessage("Restaurant order received. Admin can confirm it in the Restaurant Orders tab.");
+    setRestaurantCart([]);
+    setRestaurantCustomer({ name: "", phone: "", email: session?.user?.email || "", address: "", postcode: "", fulfilment_method: "collection" });
 
+    setMessage("Restaurant order received. Admin can confirm it in the Restaurant Orders tab.");
     if (session) loadRestaurantOrders();
   }
 
@@ -840,50 +793,32 @@ window.open(
     const stripeItems = [
       ...restaurantCart,
       ...(restaurantDeliveryFee > 0
-        ? [
-            {
-              id: "restaurant-delivery-fee",
-              name: "Delivery Fee",
-              price: restaurantDeliveryFee,
-              quantity: 1,
-              image_url: "/logo.png"
-            }
-          ]
+        ? [{ id: "restaurant-delivery-fee", name: "Delivery Fee", price: restaurantDeliveryFee, quantity: 1, image_url: "/logo.png" }]
         : [])
     ];
 
     try {
-      const response = await fetch(
-        "https://quvjpenvmdkgaesqzslv.supabase.co/functions/v1/create-checkout-session",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            items: stripeItems,
-            customer: {
-              ...restaurantCustomer,
-              department: "restaurant",
-              subtotal: restaurantSubtotal,
-              delivery_fee: restaurantDeliveryFee,
-              total: restaurantTotal
-            }
-          })
-        }
-      );
+      const response = await fetch("https://quvjpenvmdkgaesqzslv.supabase.co/functions/v1/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: stripeItems,
+          customer: {
+            ...restaurantCustomer,
+            department: "restaurant",
+            subtotal: restaurantSubtotal,
+            delivery_fee: restaurantDeliveryFee,
+            total: restaurantTotal
+          }
+        })
+      });
 
       const data = await response.json();
 
-      if (!response.ok) {
-        return setMessage(data.error || "Restaurant Stripe checkout failed.");
-      }
+      if (!response.ok) return setMessage(data.error || "Restaurant Stripe checkout failed.");
 
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setMessage("Stripe did not return a checkout URL.");
-      }
+      if (data.url) window.location.href = data.url;
+      else setMessage("Stripe did not return a checkout URL.");
     } catch (error) {
       setMessage(error.message);
     }
@@ -904,7 +839,6 @@ window.open(
     };
 
     const { data, error } = await supabase.from("products").insert(payload).select().single();
-
     if (error) return setMessage(error.message);
 
     if (newFiles.length > 0) await uploadProductFiles(newFiles, data.id);
@@ -930,7 +864,6 @@ window.open(
     };
 
     const { data, error } = await supabase.from("restaurant_foods").insert(payload).select().single();
-
     if (error) return setMessage(error.message);
 
     if (newFoodFiles.length > 0) await uploadFoodFiles(newFoodFiles, data.id);
@@ -967,7 +900,6 @@ window.open(
     };
 
     const { error } = await supabase.from("products").update(payload).eq("id", editProduct.id);
-
     if (error) return setMessage(error.message);
 
     if (editFiles.length > 0) await uploadProductFiles(editFiles, editProduct.id);
@@ -992,7 +924,6 @@ window.open(
     };
 
     const { error } = await supabase.from("restaurant_foods").update(payload).eq("id", editFood.id);
-
     if (error) return setMessage(error.message);
 
     if (editFoodFiles.length > 0) await uploadFoodFiles(editFoodFiles, editFood.id);
@@ -1058,10 +989,7 @@ window.open(
   function LandingPage() {
     return (
       <div>
-        <audio ref={audioRef} loop preload="auto">
-          <source src="/background-music.mp3" type="audio/mpeg" />
-        </audio>
-
+        
         <header className="department-hero video-hero">
           <video autoPlay muted loop playsInline className="background-video">
             <source src="/home-video.mp4" type="video/mp4" />
@@ -1081,7 +1009,7 @@ window.open(
 
           <div className="department-overlay animated-hero-text">
             <div className="wrap">
-              <img src="/logo.png" alt="Nungua Market Logo" className="home-logo logo-pulse" />
+              {/*<img src="/logo.png" alt="Nungua Market Logo" className="home-logo logo-pulse" />*/}
 
               <h1>Choose Your Department</h1>
               <p className="department-subtitle">
@@ -1100,7 +1028,7 @@ window.open(
                   <Utensils size={48} />
                   <h2>Restaurant</h2>
                   <p>Order cooked meals for collection or delivery with postcode checking.</p>
-                  <span>Enter Restaurant →</span>
+                  <span>Authentic Ghanaian cuisine →</span>
                 </button>
               </div>
             </div>
@@ -1119,7 +1047,15 @@ window.open(
     );
   }
 
-  if (!department) return <><LandingPage /><FloatingControls /></>;
+  if (!department) {
+    return (
+      <>
+        <audio ref={audioRef} src="/background-music.mp3" loop preload="auto" />
+        <LandingPage />
+        <FloatingControls />
+      </>
+    );
+  }
 
   function Header({ type }) {
     const isShop = type === "shop";
@@ -1133,8 +1069,8 @@ window.open(
               <ArrowLeft size={15} /> Departments
             </button>
 
-            <div className="gold">{info.label}</div>
-            <h1>{info.name}</h1>
+            {info.label && <div className="gold">{info.label}</div>}
+            {info.name && <h1>{info.name}</h1>}
 
             <div className="meta">
               {isShop ? (
@@ -1150,7 +1086,7 @@ window.open(
               )}
 
               <span><Phone size={15} /> {info.phone}</span>
-              <span><Clock size={15} /> {isShop ? "9am–9pm, Sunday 10am–9pm" : "12pm–10pm, Friday/Saturday 12pm–11pm"}</span>
+              <span><Clock size={15} /> {isShop ? "9am–9pm, Sunday 10am–9pm" : "10:30am–11pm, Friday/Saturday 10:30am–11pm"}</span>
             </div>
 
             {isShop ? (
@@ -1158,10 +1094,19 @@ window.open(
                 <button type="button" className={"btn " + (shopTab === "shop" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("shop")}>Shop</button>
                 <button type="button" className={"btn " + (shopTab === "contact" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("contact")}>Contact</button>
                 <button type="button" className={"btn " + (shopTab === "favourites" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("favourites")}>Wishlist</button>
-                {session && <button type="button" className={"btn " + (shopTab === "admin" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("admin")}>Admin Products</button>}
-                {session && <button type="button" className={"btn " + (shopTab === "orders" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("orders")}>Orders</button>}
-                {session && <button type="button" className={"btn " + (shopTab === "messages" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("messages")}>Messages</button>}
-                {session && <button type="button" className={"btn " + (shopTab === "analytics" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("analytics")}>Analytics</button>}
+                {isAdmin && <button type="button" className={"btn " + (shopTab === "admin" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("admin")}>Admin Products</button>}
+                {isAdmin && <button type="button" className={"btn " + (shopTab === "orders" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("orders")}>Orders</button>}
+                {isAdmin && <button type="button" className={"btn " + (shopTab === "messages" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("messages")}>Messages</button>}
+                {isAdmin && <button type="button" className={"btn " + (shopTab === "analytics" ? "btn-gold" : "btn-light")} onClick={() => setShopTab("analytics")}>Analytics</button>}
+                {isSuperAdmin && (
+                  <button
+                    type="button"
+                    className={"btn " + (shopTab === "admin-users" ? "btn-gold" : "btn-light")}
+                    onClick={() => setShopTab("admin-users")}
+                  >
+                    Admin Users
+                  </button>
+                )}
               </div>
             ) : (
               <div className="nav">
@@ -1169,8 +1114,17 @@ window.open(
                 <button type="button" className={"btn " + (restaurantTab === "delivery" ? "btn-gold" : "btn-light")} onClick={() => setRestaurantTab("delivery")}>Delivery Info</button>
                 <button type="button" className={"btn " + (restaurantTab === "contact" ? "btn-gold" : "btn-light")} onClick={() => setRestaurantTab("contact")}>Contact</button>
                 <button type="button" className={"btn " + (restaurantTab === "favourites" ? "btn-gold" : "btn-light")} onClick={() => setRestaurantTab("favourites")}>Wishlist</button>
-                {session && <button type="button" className={"btn " + (restaurantTab === "food-admin" ? "btn-gold" : "btn-light")} onClick={() => setRestaurantTab("food-admin")}>Food Admin</button>}
-                {session && <button type="button" className={"btn " + (restaurantTab === "restaurant-orders" ? "btn-gold" : "btn-light")} onClick={() => setRestaurantTab("restaurant-orders")}>Restaurant Orders</button>}
+                {isAdmin && <button type="button" className={"btn " + (restaurantTab === "food-admin" ? "btn-gold" : "btn-light")} onClick={() => setRestaurantTab("food-admin")}>Food Admin</button>}
+                {isAdmin && <button type="button" className={"btn " + (restaurantTab === "restaurant-orders" ? "btn-gold" : "btn-light")} onClick={() => setRestaurantTab("restaurant-orders")}>Restaurant Orders</button>}
+                {isSuperAdmin && (
+                  <button
+                    type="button"
+                    className={"btn " + (restaurantTab === "admin-users" ? "btn-gold" : "btn-light")}
+                    onClick={() => setRestaurantTab("admin-users")}
+                  >
+                    Admin Users
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -1317,10 +1271,7 @@ window.open(
         ></div>
 
         <div className="hero-video-content animated-hero-text">
-          <div style={{ maxWidth: "640px" }}>
-            <h2>{restaurant ? "" : "e"}</h2>
-            <p>{restaurant ? "Choose your meal, check your delivery postcode, and send your order to the restaurant." : "Order fresh produce, gari, fufu flour, jollof ingredients, spices, drinks, and household essentials."}</p>
-          </div>
+          <div style={{ maxWidth: "640px" }}></div>
         </div>
 
         <div className="hero-dots">
@@ -1352,13 +1303,77 @@ window.open(
                   <p className="muted small">{item.type === "restaurant" ? "Restaurant" : "Grocery Shop"}</p>
                   <h3>{item.name}</h3>
                   <div className="price">£{Number(item.price).toFixed(2)}</div>
-                  <button className="btn btn-red" onClick={() => setFavourites((items) => items.filter((x) => x.id !== item.id))}>
+                  <button className="btn btn-red" onClick={() => setFavourites((items) => items.filter((x) => !(x.id === item.id && x.type === item.type)))}>
                     Remove
                   </button>
                 </div>
               </article>
             ))}
           </div>
+        )}
+      </div>
+    );
+  }
+
+  function AdminUsersPage() {
+    if (!isSuperAdmin) {
+      return (
+        <div className="panel">
+          <h2>Admin Users</h2>
+          <p className="muted">Only super admins can manage admins.</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="panel">
+        <h2>Admin Users</h2>
+
+        <form onSubmit={addAdminUser} className="admin-grid">
+          <input
+            className="input"
+            type="email"
+            placeholder="New admin email"
+            value={newAdminEmail}
+            onChange={(e) => setNewAdminEmail(e.target.value)}
+          />
+
+          <button className="btn btn-dark" type="submit">
+            Add Admin
+          </button>
+        </form>
+
+        <button className="btn btn-light" type="button" onClick={loadAdminUsers}>
+          Refresh Admin List
+        </button>
+
+        <h3>Current Admins</h3>
+
+        {adminUsers.length === 0 ? (
+          <p className="muted">No admins found.</p>
+        ) : (
+          adminUsers.map((admin) => (
+            <div className="order-item" key={admin.id}>
+              <div style={{ width: "100%" }}>
+                <div className="row">
+                  <div>
+                    <b>{admin.email}</b>
+                    <p className="muted small">{admin.role}</p>
+                  </div>
+
+                  {admin.email !== session?.user?.email && (
+                    <button
+                      type="button"
+                      className="btn btn-red"
+                      onClick={() => deleteAdminUser(admin.id, admin.email)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
         )}
       </div>
     );
@@ -1451,10 +1466,11 @@ window.open(
 
             {shopTab === "contact" && ContactPage({ type: "shop" })}
             {shopTab === "favourites" && FavouritesPage()}
-            {shopTab === "admin" && session && ShopAdmin()}
-            {shopTab === "orders" && session && ShopOrders()}
-            {shopTab === "messages" && session && Messages()}
-            {shopTab === "analytics" && session && Analytics()}
+            {shopTab === "admin" && isAdmin && ShopAdmin()}
+            {shopTab === "orders" && isAdmin && ShopOrders()}
+            {shopTab === "messages" && isAdmin && Messages()}
+            {shopTab === "analytics" && isAdmin && Analytics()}
+            {shopTab === "admin-users" && isSuperAdmin && AdminUsersPage()}
           </section>
 
           <aside>
@@ -1547,8 +1563,12 @@ window.open(
             {restaurantTab === "delivery" && DeliveryInfo()}
             {restaurantTab === "contact" && ContactPage({ type: "restaurant" })}
             {restaurantTab === "favourites" && FavouritesPage()}
-            {restaurantTab === "food-admin" && session && FoodAdmin()}
-            {restaurantTab === "restaurant-orders" && session && RestaurantOrders()}
+
+            {restaurantTab === "food-admin" && isAdmin && FoodAdmin()}
+
+            {restaurantTab === "restaurant-orders" && isAdmin && RestaurantOrders()}
+
+            {restaurantTab === "admin-users" && isSuperAdmin && AdminUsersPage()}
           </section>
 
           <aside>
@@ -1572,17 +1592,12 @@ window.open(
         <div className="panel" style={{ overflow: "hidden", padding: 0 }}>
           <img
             src={info.image}
-            alt={info.name}
-            style={{
-              width: "100%",
-              height: "280px",
-              objectFit: "cover",
-              display: "block"
-            }}
+            alt={info.name || "Nungua Market"}
+            style={{ width: "100%", height: "280px", objectFit: "cover", display: "block" }}
           />
 
           <div style={{ padding: "20px" }}>
-            <h2>Contact {info.name}</h2>
+            <h2>Contact {info.name || "Nungua Market"}</h2>
             <p className="muted">{info.description}</p>
 
             {isRestaurant ? (
@@ -1641,7 +1656,7 @@ window.open(
             <div className="panel">
               <h2>Restaurant Location</h2>
               <iframe
-                title={`${info.name} Location`}
+                title={`${info.name || "Restaurant"} Location`}
                 src={`https://www.google.com/maps?q=${encodeURIComponent(info.mapQuery)}&output=embed`}
                 width="100%"
                 height="330"
@@ -1900,6 +1915,11 @@ window.open(
   }
 
 
-  return department === "shop" ? ShopPage() : RestaurantPage();
+  return (
+    <>
+      <audio ref={audioRef} src="/background-music.mp3" loop preload="auto" />
+      {department === "shop" ? ShopPage() : RestaurantPage()}
+    </>
+  );
 }
 

@@ -1208,7 +1208,7 @@ Total: £${restaurantTotal.toFixed(2)}
 
         <button className="btn btn-gold" onClick={placeOrder}>Place Order</button>{" "}
         <button className="btn btn-green" onClick={sendOrderToWhatsApp}>Send WhatsApp</button>{" "}
-        <button className="btn btn-dark" onClick={payWithStripe}>Pay by Card</button>
+        {/*<button className="btn btn-dark" onClick={payWithStripe}>Pay by Card</button>*/}
 
         <p className="muted small">Grocery card payment uses the existing shop Stripe checkout.</p>
       </div>
@@ -1257,8 +1257,8 @@ Total: £${restaurantTotal.toFixed(2)}
         <input className="input" placeholder="Email" value={restaurantCustomer.email} onChange={(e) => setRestaurantCustomer({ ...restaurantCustomer, email: e.target.value })} />
         <input className="input" placeholder="Address / collection note" value={restaurantCustomer.address} onChange={(e) => setRestaurantCustomer({ ...restaurantCustomer, address: e.target.value })} />
 
-        <button className="btn btn-gold" onClick={placeRestaurantOrder}>Send Order to Restaurant Admin</button>{" "}
-        <button className="btn btn-dark" onClick={payRestaurantByCard}>Pay by Card</button>
+        <button className="btn btn-gold" onClick={placeRestaurantOrder}>Place Your Order</button>{" "}
+        {/*<button className="btn btn-dark" onClick={payRestaurantByCard}>Pay by Card</button>*/}
 
         <p className="muted small">Restaurant card payments are currently processed using the main shop payment system.</p>
       </div>

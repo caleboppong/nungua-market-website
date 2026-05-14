@@ -989,7 +989,7 @@ Total: £${restaurantTotal.toFixed(2)}
   function LandingPage() {
     return (
       <div>
-        
+
         <header className="department-hero video-hero">
           <video autoPlay muted loop playsInline className="background-video">
             <source src="/home-video.mp4" type="video/mp4" />
@@ -1130,7 +1130,18 @@ Total: £${restaurantTotal.toFixed(2)}
           </div>
 
           <div>
-            <p><ShoppingCart size={18} /> {isShop ? count : restaurantCount} items</p>
+            <button
+              type="button"
+              className="btn btn-light"
+              onClick={() =>
+                isShop
+                  ? setShopTab("basket")
+                  : setRestaurantTab("basket")
+              }
+            >
+              <ShoppingCart size={18} />{" "}
+              {isShop ? count : restaurantCount} items
+            </button>
             {session ? (
               <button type="button" className="btn btn-light" onClick={signOut}><LogOut size={15} /> Logout</button>
             ) : (
@@ -1464,6 +1475,7 @@ Total: £${restaurantTotal.toFixed(2)}
               </>
             )}
 
+            {shopTab === "basket" && ShopBasket()}
             {shopTab === "contact" && ContactPage({ type: "shop" })}
             {shopTab === "favourites" && FavouritesPage()}
             {shopTab === "admin" && isAdmin && ShopAdmin()}
@@ -1475,7 +1487,7 @@ Total: £${restaurantTotal.toFixed(2)}
 
           <aside>
             {LoginPanels()}
-            {ShopBasket()}
+            {shopTab !== "basket" && ShopBasket()}
           </aside>
         </main>
 
@@ -1560,6 +1572,7 @@ Total: £${restaurantTotal.toFixed(2)}
               </>
             )}
 
+            {restaurantTab === "basket" && RestaurantBasket()}
             {restaurantTab === "delivery" && DeliveryInfo()}
             {restaurantTab === "contact" && ContactPage({ type: "restaurant" })}
             {restaurantTab === "favourites" && FavouritesPage()}
@@ -1573,7 +1586,7 @@ Total: £${restaurantTotal.toFixed(2)}
 
           <aside>
             {LoginPanels()}
-            {RestaurantBasket()}
+            {restaurantTab !== "basket" && RestaurantBasket()}
           </aside>
         </main>
 

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 const shopCategories = ["All", "Fresh Produce", "Meat & Seafood", "Groceries", "Grains & Flour", "Cooking Ingredients", "Oils & Sauces", "Vegetables", "Seasonings", "Spices", "Drinks", "Snacks", "Frozen Food", "Personal Care"];
-const foodCategories = ["All", "Main Meals", "Rice Dishes", "Soups", "Grills", "Sides", "Drinks", "Desserts"];
+const foodCategories = ["All", "Main Meals", "Rice Dishes", "Soups", "Grills", "Sides", "Drinks", "Desserts", "Stews", "Grill and Chops", "Quick Bites", "Smoothie & Drinks"];
 
 const slideshowImages = ["/Shop1.jpeg", "/Shop2.jpeg", "/Shop3.jpeg", "/Shop4.jpeg", "/Shop5.jpeg", "/Shop6.jpeg"];
 const restaurantSlides = ["/Restaurant1.jpeg", "/Restaurant2.jpeg", "/Restaurant3.jpeg"];

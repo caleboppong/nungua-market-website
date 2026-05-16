@@ -8,7 +8,39 @@ import {
   Music2, VolumeX
 } from "lucide-react";
 
-const shopCategories = ["All", "Fresh Produce", "Meat & Seafood", "Groceries", "Grains & Flour", "Cooking Ingredients", "Oils & Sauces", "Vegetables", "Seasonings", "Spices", "Drinks", "Snacks", "Frozen Food", "Personal Care"];
+const shopCategories = [
+  "All",
+  "Fresh Produce",
+  "Rice & Grains",
+  "Grains & Flour",
+  "Flour & Swallows",
+  "Beans & Legumes",
+  "Groceries",
+  "Cooking Ingredients",
+  "Oils & Sauces",
+  "Vegetables",
+  "Vegetables & Leaves",
+  "Seasonings",
+  "Seasonings & Spices",
+  "Spices",
+  "Meat & Seafood",
+  "Frozen Food",
+  "Drinks",
+  "Drinks & Beverages",
+  "Tea & Herbal Products",
+  "Breakfast & Cereals",
+  "Snacks",
+  "Snacks & Sweets",
+  "Bread & Bakery",
+  "Health & Wellness",
+  "Personal Care",
+  "Hair Care & Beauty",
+  "Baby Products",
+  "Household Supplies",
+  "Kitchen & Cooking Utensils",
+  "Packaging & Takeaway",
+  "Traditional Herbs"
+];
 const foodCategories = ["All", "Main Meals", "Rice Dishes", "Soups", "Grills", "Sides", "Drinks", "Desserts", "Stews", "Grill and Chops", "Quick Bites", "Smoothie & Drinks"];
 
 const slideshowImages = ["/Shop1.jpeg", "/Shop2.jpeg", "/Shop3.jpeg", "/Shop4.jpeg", "/Shop5.jpeg", "/Shop6.jpeg"];
